@@ -45,14 +45,10 @@ def nettoyage(df):
         st.header("Nettoyage")
         st.subheader("Suppression des données vides et des colonnes dupliquées")
 
-        # dropna() retourne un nouveau DataFrame par défaut.
-        # Ne pas utiliser inplace=True ici : cette option renvoie None.
         df = df.dropna(axis=0, how="any")
 
-        # Supprime les colonnes entièrement vides.
         df = df.dropna(axis=1, how="all")
 
-        # Supprime les colonnes ayant un nom dupliqué.
         df = df.loc[:, ~df.columns.duplicated()]
 
         st.sidebar.success("Nettoyage terminé")
@@ -69,3 +65,5 @@ if st.button("Nettoyage du CSV"):
     if df_nettoye is not None:
         st.write("Données nettoyées :")
         st.dataframe(df_nettoye)
+
+
