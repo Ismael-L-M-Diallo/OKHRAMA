@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import altair as alt
 
 
 def import_csv(classeur):
@@ -51,8 +52,10 @@ def nettoyage(df):
 
         df = df.loc[:, ~df.columns.duplicated()]
 
+
         st.sidebar.success("Nettoyage terminé")
-        return df
+        df1=df
+        return df1
 
     except Exception as e:
         st.sidebar.error(f"Nettoyage incomplet : {e}")
@@ -66,4 +69,23 @@ if st.button("Nettoyage du CSV"):
         st.write("Données nettoyées :")
         st.dataframe(df_nettoye)
 
+def desc1(df):
+    st.subheader("Description rapide du CSV")
+    st.dataframe(df.describe(include="all").T, use_container_width=True)
 
+if st.button("Descrption du CSV"):
+    desc1(df)
+
+
+def hist(df):
+    st.header("Histogramme de distribution du prix de la RAM")
+    barres=alt.Chart(df).mark_bar().encode(
+        x=alt.X("Prix:Q", bin=alt.Bin(maxbins=20), title = "Prix des RAM"),
+        y=alt.Y("count():Q", title = "Distribution des Prix"),
+        tooltip=["count():Q"]
+    ).properties(title="Histogramme de distribution du prix de la RAM en Q3 2026")
+    st.altair_chart(barres, use_container_width=True)
+
+if st.button("Visualisation"):
+    hist(df)
+    st.sidebar.success("Visualisation proposee par @Altair")
