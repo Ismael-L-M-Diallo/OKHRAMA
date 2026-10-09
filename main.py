@@ -1,3 +1,5 @@
+#Frameworks:
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -5,6 +7,7 @@ import seaborn as sns
 import altair as alt
 
 
+# Import des donnees/ Data Loading:
 
 def import_csv(classeur):
     try:
@@ -22,6 +25,9 @@ def import_csv(classeur):
 df = import_csv("Dataframe_prix_Ram_France_2026.csv")
 print(df)
 
+
+#Affichage des donnees en tableau / Data Display:
+
 def explore_raw_data(df):
     st.subheader('Raw Data')
     if st.checkbox('Show Raw Data'):
@@ -32,6 +38,7 @@ if df is not None:
     explore_raw_data(df)
 
 
+#TEST1
 print(df)
 
 df = df.dropna(subset=["Prix"])
@@ -41,6 +48,8 @@ df= df.dropna(axis=1, how="all")
 
 print(df)
 
+
+#Nettoyage des donnees vides et colonnes dupliquees /Data cleaning and occasional removal:
 
 def nettoyage(df):
     try:
@@ -62,6 +71,7 @@ def nettoyage(df):
         st.sidebar.error(f"Nettoyage incomplet : {e}")
         return None
 
+#Boutton de nettoyage/ Cleaning button:
 
 if st.button("Nettoyage du CSV"):
     df_nettoye = nettoyage(df)
@@ -70,13 +80,17 @@ if st.button("Nettoyage du CSV"):
         st.write("Données nettoyées :")
         st.dataframe(df_nettoye)
 
+#Description rapides des donnees (moyenne, min/max, mediane...)/ Fast Data Description:
 def desc1(df):
     st.subheader("Description rapide du CSV")
     st.dataframe(df.describe(include="all").T, use_container_width=True)
 
-if st.button("Descrption du CSV"):
+#Boutton Description/ Description Button:
+if st.button("Description du CSV"):
     desc1(df)
 
+
+#Visualisation avec un curseur/Vizualisation with options and remote. Proposee par/ All credits to Altair : https://github.com/altair-viz
 
 def hist(df):
     st.header("Histogramme de distribution du prix de la RAM")
@@ -93,6 +107,9 @@ def hist(df):
         tooltip=["count():Q"]
     ).properties(title="Histogramme de distribution du prix de la RAM en Q3 2026")
     st.altair_chart(barres, use_container_width=True)
+
+
+#Affichage direct/ Direct Display in Streamlit:
 
 hist(df)
 st.sidebar.success("Visualisation proposee par @Altair")
