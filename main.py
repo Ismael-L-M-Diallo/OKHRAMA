@@ -5,6 +5,7 @@ import seaborn as sns
 import altair as alt
 
 
+
 def import_csv(classeur):
     try:
         cs=pd.read_csv(classeur)
@@ -79,13 +80,19 @@ if st.button("Descrption du CSV"):
 
 def hist(df):
     st.header("Histogramme de distribution du prix de la RAM")
-    barres=alt.Chart(df).mark_bar().encode(
+    curseur=st.slider(
+        label="Filtre du prix de la RAM",
+        min_value=30,
+        max_value=300,
+        value=100
+    )
+    df_filtre=df[df["Prix"]<=curseur]
+    barres=alt.Chart(df_filtre).mark_bar().encode(
         x=alt.X("Prix:Q", bin=alt.Bin(maxbins=20), title = "Prix des RAM"),
         y=alt.Y("count():Q", title = "Distribution des Prix"),
         tooltip=["count():Q"]
     ).properties(title="Histogramme de distribution du prix de la RAM en Q3 2026")
     st.altair_chart(barres, use_container_width=True)
 
-if st.button("Visualisation"):
-    hist(df)
-    st.sidebar.success("Visualisation proposee par @Altair")
+hist(df)
+st.sidebar.success("Visualisation proposee par @Altair")
