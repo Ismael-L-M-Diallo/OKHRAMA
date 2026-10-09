@@ -5,13 +5,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import altair as alt
-
+from urllib.request import urlretrieve
 
 # Import des donnees/ Data Loading:
 
 def import_csv(classeur):
     try:
-        cs=pd.read_csv(classeur)
+        url=(
+        "https://raw.githubusercontent.com/Ismael-L-M-Diallo/RamStasi/main/Dataframe_prix_Ram_France_2026.csv")
+        urlretrieve(url, "Dataframe.csv")       
+        cs=pd.read_csv("Dataframe.csv")
         st.sidebar.success("CSV charge avec succes.")
         return cs
 
@@ -22,7 +25,7 @@ def import_csv(classeur):
 
     return None   
 
-df = import_csv("Dataframe_prix_Ram_France_2026.csv")
+df = import_csv("Dataframe.csv")
 print(df)
 
 
